@@ -46,6 +46,9 @@ def complete_process(request, backend):
     """Authentication complete process"""
     user = auth_complete(request, backend)
 
+    if isinstance(user, HttpResponse):
+        return user
+    
     if user and getattr(user, 'is_active', True):
         login(request, user)
         # user.social_user is the used UserSocialAuth instance defined
@@ -138,7 +141,7 @@ def auth_complete(request, backend):
     user = request.user if request.user.is_authenticated() else None
 
     try:
-        user = backend.auth_complete(user=user)
+        user = backend.auth_complete(user=user, request=request)
     except ValueError, e:  # some Authentication error ocurred
         error_key = getattr(settings, 'SOCIAL_AUTH_ERROR_KEY', None)
         if error_key:  # store error in session
