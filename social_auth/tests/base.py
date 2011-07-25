@@ -3,10 +3,9 @@ import urllib2
 import cookielib
 import urllib
 import urlparse
-import unittest
 from sgmllib import SGMLParser
 
-from django.test.client import Client
+from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 
 
@@ -14,10 +13,11 @@ USER_AGENT = 'Mozilla/5.0'
 REFRESH_RE = re.compile(r'\d;\s*url=')
 
 
-class SocialAuthTestsCase(unittest.TestCase):
+class SocialAuthTestsCase(TestCase):
     """Base class for social auth tests"""
     SERVER_NAME = None
     SERVER_PORT = None
+    urls = 'social_auth.urls'
 
     def __init__(self, *args, **kwargs):
         client_kwargs = {}
